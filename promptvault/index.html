@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no" />
+
+    <!-- Primary Meta Tags -->
+    <title>PromptVault — Your personal AI prompt library</title>
+    <meta name="title" content="PromptVault — Your personal AI prompt library" />
+    <meta name="description" content="A fast, offline-first PWA to save, search, and copy your favourite AI prompts. Works on any device, even without internet." />
+    <meta name="keywords" content="AI prompts, prompt library, prompt manager, ChatGPT prompts, prompt engineering, AI productivity, offline PWA" />
+    <meta name="author" content="PromptVault" />
+    <meta name="theme-color" content="#0a0a0b" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#0a0a0b" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="PromptVault" />
+    <meta name="application-name" content="PromptVault" />
+    <meta name="format-detection" content="telephone=no" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="/" />
+    <meta property="og:title" content="PromptVault — Your personal AI prompt library" />
+    <meta property="og:description" content="Save, search, and copy your favourite AI prompts offline. Lightning-fast PWA." />
+    <meta property="og:image" content="/icons/icon-512.png" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="/" />
+    <meta name="twitter:title" content="PromptVault — Your personal AI prompt library" />
+    <meta name="twitter:description" content="Save, search, and copy your favourite AI prompts offline. Lightning-fast PWA." />
+    <meta name="twitter:image" content="/icons/icon-512.png" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="mask-icon" href="/icons/icon.svg" color="#7c3aed" />
+
+    <!-- Preconnect to font origins for faster font loading -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Preload only the LCP/most-used font weights to keep things light -->
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap"
+      />
+    </noscript>
+
+    <!-- Critical inline CSS for faster first paint (above-the-fold only) -->
+    <style>
+      :root { color-scheme: dark; }
+      html, body { margin: 0; padding: 0; background: #0a0a0b; color: #f5f5f6; }
+      html { -webkit-tap-highlight-color: transparent; overscroll-behavior: none; -webkit-overflow-scrolling: touch; }
+      body { min-height: 100vh; min-height: 100dvh; overflow-x: hidden; font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+      #root { min-height: 100vh; min-height: 100dvh; display: block; }
+      .app-splash { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; background: #0a0a0b; z-index: 9999; transition: opacity .25s ease-out; }
+      .app-splash.fade { opacity: 0; pointer-events: none; }
+      .app-splash-logo { width: 64px; height: 64px; border-radius: 16px; background: linear-gradient(135deg, #7c3aed, #4c1d95); display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 24px rgba(124, 58, 237, 0.35); animation: pulse 1.6s ease-in-out infinite; }
+      .app-splash-logo svg { width: 36px; height: 36px; }
+      @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.06); } }
+    </style>
+  </head>
+  <body>
+    <!-- Pre-rendered splash shown immediately to eliminate white flash -->
+    <div class="app-splash" id="app-splash">
+      <div class="app-splash-logo" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="7" y="11" width="10" height="9" rx="2" />
+          <path d="M9 11V8a3 3 0 0 1 6 0v3" />
+        </svg>
+      </div>
+    </div>
+
+    <div id="root"></div>
+
+    <script type="module" src="/src/main.tsx"></script>
+    <script>
+      // Hide splash as soon as React renders
+      (function () {
+        function hideSplash() {
+          var el = document.getElementById('app-splash');
+          if (el) {
+            el.classList.add('fade');
+            setTimeout(function () { el.remove(); }, 300);
+          }
+        }
+        if (document.readyState === 'complete') hideSplash();
+        else window.addEventListener('load', hideSplash);
+        // Safety net: hide after 4s even if load never fires
+        setTimeout(hideSplash, 4000);
+      })();
+    </script>
+  </body>
+</html>
