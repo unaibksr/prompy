@@ -84,39 +84,6 @@ function BrowsePageBase() {
           ))}
         </div>
 
-        {/* Tags */}
-        {allTags.length > 0 && (
-          <div
-            className="flex gap-1.5 overflow-x-auto pb-0.5 scrollbar-none -mx-0.5 px-0.5"
-            role="tablist"
-            aria-label="Filter by tag"
-          >
-            <button
-              onClick={handleClearTag}
-              className={`chip shrink-0 px-2.5 py-0.5 text-[11px] ${
-                !filterTag ? 'chip-active' : ''
-              }`}
-              role="tab"
-              aria-selected={!filterTag}
-            >
-              All
-            </button>
-            {allTags.map((t) => (
-              <button
-                key={t}
-                onClick={() => setFilterTag(t)}
-                className={`chip shrink-0 px-2.5 py-0.5 text-[11px] ${
-                  filterTag === t ? 'chip-active' : ''
-                }`}
-                role="tab"
-                aria-selected={filterTag === t}
-              >
-                {t}
-              </button>
-            ))}
-          </div>
-        )}
-
         {/* Sort */}
         <div className="flex items-center gap-1.5 pt-0.5 px-0.5">
           <span className="text-[10px] uppercase tracking-wider text-surface-500">Sort</span>
@@ -153,6 +120,7 @@ function BrowsePageBase() {
               key={prompt.id}
               prompt={prompt}
               onTap={() => setSelected(prompt)}
+              showTags={false}
             />
           ))}
           {filtered.length === 0 && (

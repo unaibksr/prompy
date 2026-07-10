@@ -6,9 +6,10 @@ import { getPlatformStyle } from '../lib/platforms';
 interface Props {
   prompt: Prompt;
   onTap: () => void;
+  showTags?: boolean;
 }
 
-function PromptCardBase({ prompt, onTap }: Props) {
+function PromptCardBase({ prompt, onTap, showTags = true }: Props) {
   const toggleFavorite = usePromptStore((s) => s.toggleFavorite);
   const deletePrompt = usePromptStore((s) => s.deletePrompt);
 
@@ -133,7 +134,7 @@ function PromptCardBase({ prompt, onTap }: Props) {
               {platform}
             </span>
           )}
-          {prompt.tags.slice(0, 3).map((tag) => (
+          {showTags && prompt.tags.slice(0, 3).map((tag) => (
             <span
               key={tag}
               className="inline-flex items-center px-1.5 py-0.5 rounded-full text-[9px] font-medium bg-surface-800 text-surface-300 border border-surface-700"
@@ -141,7 +142,7 @@ function PromptCardBase({ prompt, onTap }: Props) {
               #{tag}
             </span>
           ))}
-          {prompt.tags.length > 3 && (
+          {showTags && prompt.tags.length > 3 && (
             <span className="text-[9px] text-surface-500">+{prompt.tags.length - 3}</span>
           )}
         </div>
