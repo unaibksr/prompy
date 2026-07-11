@@ -1,4 +1,4 @@
-import { memo, useCallback, useMemo, useRef, useState } from 'react';
+import { memo, useCallback, useMemo, useRef } from 'react';
 import type { Prompt } from '../types';
 import { usePromptStore } from '../stores/usePromptStore';
 import { getPlatformStyle } from '../lib/platforms';
@@ -13,7 +13,6 @@ function PromptCardBase({ prompt, onTap, showTags = true }: Props) {
   const toggleFavorite = usePromptStore((s) => s.toggleFavorite);
   const deletePrompt = usePromptStore((s) => s.deletePrompt);
 
-  const [swiping, setSwiping] = useState<'left' | 'right' | null>(null);
   const startX = useRef(0);
   const currentX = useRef(0);
   const isDragging = useRef(false);
@@ -31,9 +30,9 @@ function PromptCardBase({ prompt, onTap, showTags = true }: Props) {
     if (Math.abs(diff) > 50 && cardRef.current) {
       cardRef.current.style.transform = `translateX(${diff}px)`;
       if (diff > 50) {
-        cardRef.current.style.backgroundColor = 'rgba(34, 197, 94, 0.1)';
+        cardRef.current.style.backgroundColor = 'rgba(34, 197, 94, 0.08)';
       } else if (diff < -50) {
-        cardRef.current.style.backgroundColor = 'rgba(239, 68, 68, 0.1)';
+        cardRef.current.style.backgroundColor = 'rgba(239, 68, 68, 0.08)';
       }
     }
   }, []);
@@ -43,15 +42,27 @@ function PromptCardBase({ prompt, onTap, showTags = true }: Props) {
     if (!cardRef.current) return;
 
     if (diff > 100) {
-      setSwiping('right');
       cardRef.current.style.transform = 'translateX(150%)';
       cardRef.current.style.opacity = '0';
-      setTimeout(() => toggleFavorite(prompt.id), 200);
+      setTimeout(() => {
+        toggleFavorite(prompt.id);
+        if (cardRef.current) {
+          cardRef.current.style.transform = '';
+          cardRef.current.style.opacity = '';
+          cardRef.current.style.backgroundColor = '';
+        }
+      }, 200);
     } else if (diff < -100) {
-      setSwiping('left');
       cardRef.current.style.transform = 'translateX(-150%)';
       cardRef.current.style.opacity = '0';
-      setTimeout(() => deletePrompt(prompt.id), 200);
+      setTimeout(() => {
+        deletePrompt(prompt.id);
+        if (cardRef.current) {
+          cardRef.current.style.transform = '';
+          cardRef.current.style.opacity = '';
+          cardRef.current.style.backgroundColor = '';
+        }
+      }, 200);
     } else {
       cardRef.current.style.transform = '';
       cardRef.current.style.backgroundColor = '';
@@ -73,9 +84,8 @@ function PromptCardBase({ prompt, onTap, showTags = true }: Props) {
     [prompt.id, toggleFavorite]
   );
 
-  // Show more of the body now that we have less whitespace (160 → 200)
   const bodyPreview = useMemo(
-    () => (prompt.body.length > 200 ? prompt.body.slice(0, 200) + '…' : prompt.body),
+    () => (prompt.body.length > 160 ? prompt.body.slice(0, 160) + '…' : prompt.body),
     [prompt.body]
   );
 
@@ -84,27 +94,27 @@ function PromptCardBase({ prompt, onTap, showTags = true }: Props) {
 
   return (
     <div className="relative">
-      <div className="absolute inset-0 flex items-center justify-between px-3 pointer-events-none rounded-xl">
-        <div className="text-green-500 opacity-50 text-xs font-medium">Favorite</div>
-        <div className="text-red-500 opacity-50 text-xs font-medium">Delete</div>
+      <div className="absolute inset-0 flex items-center justify-between px-3 pointer-events-none rounded-2xl">
+        <div className="text-green-500/40 text-[10px] font-medium">Favorite</div>
+        <div className="text-red-500/40 text-[10px] font-medium">Delete</div>
       </div>
       <div
         ref={cardRef}
         data-card-id={prompt.id}
-        className="card cursor-pointer relative z-10 bg-surface-900 transition-all duration-200 will-change-transform p-2.5"
+        className="card cursor-pointer relative z-10"
         style={{ touchAction: 'pan-y' }}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
         onClick={handleClick}
       >
-        <div className="flex items-start justify-between gap-1.5 mb-1">
-          <h3 className="font-semibold text-surface-50 text-[13px] leading-tight line-clamp-2 flex-1">
+        <div className="flex items-start justify-between gap-1.5 mb-1.5">
+          <h3 className="font-medium text-surface-50 text-sm leading-snug line-clamp-2 flex-1">
             {prompt.title}
           </h3>
           <button
             onClick={handleFavClick}
-            className="shrink-0 -mr-1 -mt-1 p-1 rounded-md hover:bg-surface-800"
+            className="shrink-0 -mr-1 -mt-1 p-1 rounded-lg hover:bg-surface-800/50 transition-colors"
             aria-label={prompt.is_favorite ? 'Unfavorite' : 'Favorite'}
           >
             <svg
@@ -121,12 +131,11 @@ function PromptCardBase({ prompt, onTap, showTags = true }: Props) {
           </button>
         </div>
 
-        {/* Show 4 lines of body on mobile — more info, less whitespace */}
-        <p className="text-surface-300 text-[11px] font-mono leading-snug mb-1.5 whitespace-pre-wrap line-clamp-4">
+        <p className="text-surface-400 text-[11px] font-mono leading-relaxed mb-2 whitespace-pre-wrap line-clamp-3">
           {bodyPreview}
         </p>
 
-        <div className="flex flex-wrap items-center gap-1 mb-1">
+        <div className="flex flex-wrap items-center gap-1 mb-1.5">
           {platform && (
             <span
               className={`inline-flex items-center px-1.5 py-0.5 rounded-full text-[9px] font-semibold border ${platformStyle.pill}`}
@@ -134,21 +143,21 @@ function PromptCardBase({ prompt, onTap, showTags = true }: Props) {
               {platform}
             </span>
           )}
-          {showTags && prompt.tags.slice(0, 3).map((tag) => (
+          {showTags && prompt.tags.slice(0, 2).map((tag) => (
             <span
               key={tag}
-              className="inline-flex items-center px-1.5 py-0.5 rounded-full text-[9px] font-medium bg-surface-800 text-surface-300 border border-surface-700"
+              className="inline-flex items-center px-1.5 py-0.5 rounded-full text-[9px] font-medium bg-surface-800/50 text-surface-400 border border-surface-700/30"
             >
               #{tag}
             </span>
           ))}
-          {showTags && prompt.tags.length > 3 && (
-            <span className="text-[9px] text-surface-500">+{prompt.tags.length - 3}</span>
+          {showTags && prompt.tags.length > 2 && (
+            <span className="text-[9px] text-surface-500">+{prompt.tags.length - 2}</span>
           )}
         </div>
 
-        <div className="flex items-center justify-between text-[10px] text-surface-500 tabular-nums">
-          <span>{prompt.use_count}× used</span>
+        <div className="flex items-center justify-between text-[9px] text-surface-500 tabular-nums">
+          <span>{prompt.use_count} uses</span>
           <span>
             {new Date(prompt.updated_at).toLocaleDateString(undefined, {
               month: 'short',

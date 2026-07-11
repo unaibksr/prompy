@@ -53,5 +53,6 @@ export async function deletePrompt(id: string): Promise<void> {
 }
 
 export async function incrementUseCount(id: string): Promise<void> {
-  await supabase.rpc('increment_use_count', { prompt_id: id });
+  const { error } = await supabase.rpc('increment_use_count', { prompt_id: id });
+  if (error) throw error;
 }

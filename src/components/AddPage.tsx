@@ -10,8 +10,8 @@ function AddPageBase() {
   }, [setActiveTab]);
 
   return (
-    <div className="px-3 pt-2 pb-24 space-y-2">
-      <h1 className="text-lg font-bold text-surface-50 leading-none">Add Prompt</h1>
+    <div className="px-3 sm:px-4 pt-3 pb-28 space-y-3 animate-fade-in">
+      <h1 className="text-xl font-semibold text-surface-50 tracking-tight px-1">Add Prompt</h1>
       <PromptForm onDone={handleDone} />
     </div>
   );

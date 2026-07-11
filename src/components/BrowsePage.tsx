@@ -19,7 +19,6 @@ function BrowsePageBase() {
   const filterPlatform = usePromptStore((s) => s.filterPlatform);
   const filterTag = usePromptStore((s) => s.filterTag);
   const setFilterPlatform = usePromptStore((s) => s.setFilterPlatform);
-  const setFilterTag = usePromptStore((s) => s.setFilterTag);
   const sortBy = usePromptStore((s) => s.sortBy);
   const setSortBy = usePromptStore((s) => s.setSortBy);
   const getFilteredPrompts = usePromptStore((s) => s.getFilteredPrompts);
@@ -32,22 +31,14 @@ function BrowsePageBase() {
     [prompts, filterPlatform, filterTag, sortBy]
   );
 
-  // Extract unique tags from prompts (only when prompts list changes)
-  const allTags = useMemo(() => {
-    const set = new Set<string>();
-    prompts.forEach((p) => p.tags.forEach((t) => set.add(t)));
-    return Array.from(set).sort();
-  }, [prompts]);
-
   const handleClose = useCallback(() => setSelected(null), []);
-  const handleClearTag = useCallback(() => setFilterTag(''), [setFilterTag]);
 
   return (
-    <div className="px-2.5 sm:px-3 pt-2 pb-24 space-y-2.5">
-      {/* Compact header */}
-      <div className="flex items-baseline justify-between gap-2 px-0.5">
-        <h1 className="text-lg font-bold text-surface-50 leading-none">PromptVault</h1>
-        <p className="text-[11px] text-surface-500 tabular-nums">
+    <div className="px-3 sm:px-4 pt-3 pb-28 space-y-3 animate-fade-in">
+      {/* Minimal header */}
+      <div className="flex items-center justify-between px-1">
+        <h1 className="text-xl font-semibold text-surface-50 tracking-tight">Vault</h1>
+        <p className="text-xs text-surface-400 tabular-nums">
           {prompts.length} prompt{prompts.length === 1 ? '' : 's'}
         </p>
       </div>
@@ -55,17 +46,17 @@ function BrowsePageBase() {
       {error && (
         <div
           role="status"
-          className="bg-yellow-500/10 border border-yellow-500/20 rounded-lg px-3 py-1.5 text-xs text-yellow-400"
+          className="bg-yellow-500/10 border border-yellow-500/20 rounded-xl px-3.5 py-2 text-xs text-yellow-400"
         >
           {error}
         </div>
       )}
 
-      {/* Compact filters */}
-      <div className="space-y-1.5">
+      {/* Filters */}
+      <div className="space-y-2">
         {/* Platform chips */}
         <div
-          className="flex gap-1.5 overflow-x-auto pb-0.5 scrollbar-none -mx-0.5 px-0.5"
+          className="flex gap-1.5 overflow-x-auto pb-0.5 scrollbar-none -mx-1 px-1"
           role="tablist"
           aria-label="Filter by platform"
         >
@@ -73,7 +64,7 @@ function BrowsePageBase() {
             <button
               key={p}
               onClick={() => setFilterPlatform(p)}
-              className={`chip shrink-0 px-2.5 py-0.5 text-[11px] ${
+              className={`chip shrink-0 text-xs ${
                 filterPlatform === p ? 'chip-active' : ''
               }`}
               role="tab"
@@ -85,17 +76,17 @@ function BrowsePageBase() {
         </div>
 
         {/* Sort */}
-        <div className="flex items-center gap-1.5 pt-0.5 px-0.5">
-          <span className="text-[10px] uppercase tracking-wider text-surface-500">Sort</span>
+        <div className="flex items-center gap-2 px-1">
+          <span className="text-[10px] uppercase tracking-widest text-surface-500 font-medium">Sort</span>
           <div className="flex gap-1 flex-wrap">
             {SORT_OPTIONS.map((opt) => (
               <button
                 key={opt.value}
                 onClick={() => setSortBy(opt.value)}
-                className={`px-2 py-0.5 rounded-full text-[11px] font-medium border transition-all duration-150 ${
+                className={`px-2.5 py-1 rounded-full text-xs font-medium transition-all duration-200 ${
                   sortBy === opt.value
-                    ? 'bg-accent/20 text-accent-300 border-accent/30'
-                    : 'bg-surface-900 text-surface-400 border-surface-800 hover:text-surface-200'
+                    ? 'bg-accent/15 text-accent-300 border border-accent/30'
+                    : 'text-surface-400 hover:text-surface-200'
                 }`}
                 aria-pressed={sortBy === opt.value}
               >
@@ -107,14 +98,14 @@ function BrowsePageBase() {
       </div>
 
       {loading && (
-        <div className="flex items-center justify-center py-8" aria-busy="true">
-          <div className="animate-spin rounded-full h-7 w-7 border-2 border-accent border-t-transparent" />
+        <div className="flex items-center justify-center py-12" aria-busy="true">
+          <div className="w-6 h-6 border-2 border-accent/30 border-t-accent rounded-full animate-spin" />
         </div>
       )}
 
-      {/* Denser grid: 2 cols on phone, 3 on sm, 4 on lg */}
+      {/* Card grid */}
       {!loading && (
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2.5">
           {filtered.map((prompt) => (
             <PromptCard
               key={prompt.id}
@@ -124,9 +115,10 @@ function BrowsePageBase() {
             />
           ))}
           {filtered.length === 0 && (
-            <div className="col-span-full text-center py-10">
-              <p className="text-surface-500 text-sm">No prompts found</p>
-              <p className="text-surface-600 text-xs mt-1">Try adjusting your filters</p>
+            <div className="col-span-full text-center py-16">
+              <div className="text-surface-600 text-3xl mb-3">◌</div>
+              <p className="text-surface-400 text-sm">No prompts found</p>
+              <p className="text-surface-500 text-xs mt-1">Try adjusting your filters</p>
             </div>
           )}
         </div>

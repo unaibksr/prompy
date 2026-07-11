@@ -34,15 +34,15 @@ function SearchPageBase() {
   }, [setSearchQuery]);
 
   return (
-    <div className="px-2.5 sm:px-3 pt-2 pb-24 space-y-2.5">
-      <h1 className="text-lg font-bold text-surface-50 leading-none px-0.5">Search</h1>
+    <div className="px-3 sm:px-4 pt-3 pb-28 space-y-3 animate-fade-in">
+      <h1 className="text-xl font-semibold text-surface-50 tracking-tight px-1">Search</h1>
 
       <div className="relative">
-        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-surface-500 pointer-events-none">
-          <SearchIcon size={18} />
+        <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-surface-400 pointer-events-none">
+          <SearchIcon size={16} />
         </span>
         <input
-          className="input-field pl-10 pr-10 py-2.5"
+          className="input-field pl-10 pr-10 py-2.5 text-sm"
           placeholder="Search prompts, tags, body…"
           value={searchQuery}
           onChange={(e) => handleChange(e.target.value)}
@@ -57,7 +57,7 @@ function SearchPageBase() {
         {searchQuery && (
           <button
             onClick={clearSearch}
-            className="absolute right-2 top-1/2 -translate-y-1/2 text-surface-500 hover:text-surface-200 p-1.5 rounded-md hover:bg-surface-800"
+            className="absolute right-2.5 top-1/2 -translate-y-1/2 text-surface-400 hover:text-surface-200 p-1.5 rounded-lg hover:bg-surface-800/50 transition-colors"
             aria-label="Clear search"
           >
             <CloseIcon size={16} />
@@ -65,17 +65,19 @@ function SearchPageBase() {
         )}
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2.5">
         {searchQuery && results.length === 0 && debouncedQuery === searchQuery && (
-          <div className="col-span-full text-center py-10">
-            <p className="text-surface-500 text-sm">No results for "{searchQuery}"</p>
-            <p className="text-surface-600 text-xs mt-1">Try different keywords</p>
+          <div className="col-span-full text-center py-16">
+            <div className="text-surface-600 text-3xl mb-3">◌</div>
+            <p className="text-surface-400 text-sm">No results for "{searchQuery}"</p>
+            <p className="text-surface-500 text-xs mt-1">Try different keywords</p>
           </div>
         )}
         {!searchQuery && (
-          <div className="col-span-full text-center py-10">
-            <p className="text-surface-500 text-sm">Type to search your prompts</p>
-            <p className="text-surface-600 text-xs mt-1">
+          <div className="col-span-full text-center py-16">
+            <div className="text-surface-600 text-3xl mb-3">⌕</div>
+            <p className="text-surface-400 text-sm">Type to search your prompts</p>
+            <p className="text-surface-500 text-xs mt-1">
               {prompts.length === 0
                 ? 'No prompts yet — add one first'
                 : `${prompts.length} prompts indexed`}

@@ -3,9 +3,7 @@ import { useEffect, useState } from 'react';
 import { useOnlineStatus } from '../hooks/usePwa';
 
 /**
- * In-app notification that a new service worker has been downloaded and
- * is waiting to take over. The user can choose to reload now to update
- * (preserves no offline data; just refreshes cached assets).
+ * In-app notification that a new service worker has been downloaded.
  */
 export default function UpdatePrompt() {
   const online = useOnlineStatus();
@@ -15,26 +13,19 @@ export default function UpdatePrompt() {
     updateServiceWorker,
   } = useRegisterSW({
     onRegisteredSW(swUrl, reg) {
-      // Periodically check for SW updates (every hour) when online
       if (reg && online) {
         setInterval(() => {
-          reg.update().catch(() => {
-            /* silent */
-          });
+          reg.update().catch(() => {});
         }, 60 * 60 * 1000);
       }
-      // Touch swUrl so eslint/TS doesn't complain about unused
       void swUrl;
     },
-    onRegisterError() {
-      // Silent; SW registration failure is non-fatal — the app still works.
-    },
+    onRegisterError() {},
   });
 
   const [dismissedOffline, setDismissedOffline] = useState(false);
 
   useEffect(() => {
-    // Auto-dismiss the "offline ready" banner after 6s
     if (offlineReady) {
       const t = setTimeout(() => setOfflineReady(false), 6000);
       return () => clearTimeout(t);
@@ -46,21 +37,21 @@ export default function UpdatePrompt() {
       <div
         role="alert"
         className="fixed bottom-24 left-1/2 -translate-x-1/2 z-[60]
-                   bg-accent text-white border border-accent-400
-                   rounded-xl px-4 py-3 shadow-2xl
+                   bg-accent/90 text-white border border-accent-400/30
+                   rounded-xl px-4 py-3 shadow-soft
                    flex items-center gap-3 text-sm font-medium
-                   animate-slide-up max-w-[92vw]"
+                   animate-slide-up max-w-[92vw] backdrop-blur-xl"
       >
-        <span>A new version is available.</span>
+        <span>New version available</span>
         <button
           onClick={() => updateServiceWorker(true)}
-          className="bg-white text-accent font-semibold rounded-lg px-3 py-1.5 min-h-touch active:scale-95"
+          className="bg-white text-accent font-semibold rounded-lg px-3 py-1.5 min-h-touch active:scale-95 transition-all"
         >
           Reload
         </button>
         <button
           onClick={() => setNeedRefresh(false)}
-          className="text-white/80 hover:text-white min-h-touch px-2"
+          className="text-white/70 hover:text-white min-h-touch px-2 transition-colors"
           aria-label="Dismiss"
         >
           ✕
@@ -74,10 +65,10 @@ export default function UpdatePrompt() {
       <div
         role="status"
         className="fixed bottom-24 left-1/2 -translate-x-1/2 z-[60]
-                   bg-surface-800 text-surface-100 border border-surface-700
-                   rounded-xl px-4 py-3 shadow-2xl
+                   bg-surface-800/90 text-surface-100 border border-surface-700/50
+                   rounded-xl px-4 py-3 shadow-soft
                    flex items-center gap-3 text-sm font-medium
-                   animate-slide-up max-w-[92vw]"
+                   animate-slide-up max-w-[92vw] backdrop-blur-xl"
       >
         <svg
           width="18"
@@ -97,7 +88,7 @@ export default function UpdatePrompt() {
             setOfflineReady(false);
             setDismissedOffline(true);
           }}
-          className="text-surface-400 hover:text-surface-100 ml-2 min-h-touch px-2"
+          className="text-surface-400 hover:text-surface-100 ml-2 min-h-touch px-2 transition-colors"
           aria-label="Dismiss"
         >
           ✕

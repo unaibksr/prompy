@@ -4,9 +4,9 @@ import type { Prompt } from '../types';
 const DB_NAME = 'promptvault';
 const DB_VERSION = 1;
 
-let dbPromise: Promise<IDBPDatabase> | null = null;
+let dbPromise: Promise<IDBPDatabase<unknown>> | null = null;
 
-function getDb(): Promise<IDBPDatabase> {
+function getDb(): Promise<IDBPDatabase<unknown>> {
   if (!dbPromise) {
     dbPromise = openDB(DB_NAME, DB_VERSION, {
       upgrade(db) {

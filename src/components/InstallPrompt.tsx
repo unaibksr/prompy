@@ -2,11 +2,10 @@ import { useEffect, useState } from 'react';
 import { usePwaInstall, useOnlineStatus } from '../hooks/usePwa';
 
 const DISMISS_KEY = 'promptvault_install_dismissed';
-const DISMISS_DAYS = 7; // Re-prompt after this many days
+const DISMISS_DAYS = 7;
 
 /**
- * Subtle install banner shown to first-time visitors. We auto-dismiss the
- * prompt for a week after the user dismisses it to avoid being annoying.
+ * Subtle install banner shown to first-time visitors.
  */
 export default function InstallPrompt() {
   const { canInstall, prompt } = usePwaInstall();
@@ -27,7 +26,6 @@ export default function InstallPrompt() {
     const oneWeek = DISMISS_DAYS * 24 * 60 * 60 * 1000;
     if (dismissedAt && Date.now() - dismissedAt < oneWeek) return;
 
-    // Small delay so the banner doesn't fight the splash
     const t = setTimeout(() => setVisible(true), 2500);
     return () => clearTimeout(t);
   }, [canInstall]);
@@ -53,13 +51,13 @@ export default function InstallPrompt() {
       role="dialog"
       aria-label="Install PromptVault"
       className="fixed left-3 right-3 bottom-24 z-[55]
-                 bg-surface-900 border border-surface-700
-                 rounded-2xl p-4 shadow-2xl
+                 bg-surface-900/95 backdrop-blur-xl border border-surface-700/50
+                 rounded-2xl p-4 shadow-soft
                  flex items-start gap-3 animate-slide-up
                  sm:left-auto sm:right-4 sm:max-w-sm"
     >
       <div
-        className="shrink-0 w-10 h-10 rounded-xl flex items-center justify-center"
+        className="shrink-0 w-10 h-10 rounded-xl flex items-center justify-center shadow-glow"
         style={{
           background: 'linear-gradient(135deg, #7c3aed, #4c1d95)',
         }}
@@ -83,18 +81,18 @@ export default function InstallPrompt() {
       <div className="flex-1 min-w-0">
         <p className="font-semibold text-surface-50 text-sm">Install PromptVault</p>
         <p className="text-xs text-surface-400 mt-0.5 leading-snug">
-          Add to your home screen for one-tap access — works offline.
+          Add to home screen for one-tap access — works offline.
         </p>
         <div className="flex items-center gap-2 mt-3">
           <button
             onClick={handleInstall}
-            className="bg-accent text-white text-xs font-semibold rounded-lg px-3 py-2 min-h-touch active:scale-95"
+            className="bg-accent/90 text-white text-xs font-semibold rounded-lg px-3.5 py-2 min-h-touch active:scale-95 hover:bg-accent transition-all"
           >
             Install
           </button>
           <button
             onClick={handleDismiss}
-            className="text-surface-400 text-xs font-medium px-3 py-2 min-h-touch active:bg-surface-800 rounded-lg"
+            className="text-surface-400 text-xs font-medium px-3.5 py-2 min-h-touch hover:bg-surface-800/50 rounded-lg transition-all"
           >
             Not now
           </button>

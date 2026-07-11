@@ -81,17 +81,17 @@ function PromptFormBase({ initial, onDone }: Props) {
   const canSubmit = !!title.trim() && !!body.trim() && !saving;
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-3.5">
+    <form onSubmit={handleSubmit} className="space-y-4">
       <div>
         <label
           htmlFor="prompt-title"
-          className="text-xs font-medium text-surface-300 mb-1 block"
+          className="text-xs font-medium text-surface-400 mb-1.5 block"
         >
           Title
         </label>
         <input
           id="prompt-title"
-          className="input-field py-2.5"
+          className="input-field"
           placeholder="Give your prompt a name…"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
@@ -103,13 +103,13 @@ function PromptFormBase({ initial, onDone }: Props) {
       <div>
         <label
           htmlFor="prompt-body"
-          className="text-xs font-medium text-surface-300 mb-1 block"
+          className="text-xs font-medium text-surface-400 mb-1.5 block"
         >
           Prompt Body
         </label>
         <textarea
           id="prompt-body"
-          className="input-field min-h-[110px] font-mono resize-y py-2.5 text-sm"
+          className="input-field min-h-[120px] font-mono resize-y text-sm"
           placeholder="Paste your prompt here…"
           value={body}
           onChange={(e) => setBody(e.target.value)}
@@ -118,7 +118,7 @@ function PromptFormBase({ initial, onDone }: Props) {
       </div>
 
       <div>
-        <label className="text-xs font-medium text-surface-300 mb-1 block">
+        <label className="text-xs font-medium text-surface-400 mb-1.5 block">
           Platform
         </label>
         <div className="flex gap-1.5 flex-wrap">
@@ -127,7 +127,7 @@ function PromptFormBase({ initial, onDone }: Props) {
               key={p}
               type="button"
               onClick={() => setPlatform(p)}
-              className={`chip px-2.5 py-0.5 text-[11px] ${
+              className={`chip text-xs ${
                 platform === p ? 'chip-active' : ''
               }`}
               aria-pressed={platform === p}
@@ -141,14 +141,14 @@ function PromptFormBase({ initial, onDone }: Props) {
       <div>
         <label
           htmlFor="tag-input"
-          className="text-xs font-medium text-surface-300 mb-1 block"
+          className="text-xs font-medium text-surface-400 mb-1.5 block"
         >
           Tags
         </label>
         <div className="flex gap-1.5">
           <input
             id="tag-input"
-            className="input-field flex-1 py-2.5"
+            className="input-field flex-1"
             placeholder="Add tag…"
             value={tagInput}
             onChange={(e) => setTagInput(e.target.value)}
@@ -163,17 +163,17 @@ function PromptFormBase({ initial, onDone }: Props) {
           </button>
         </div>
         {tags.length > 0 && (
-          <div className="flex flex-wrap gap-1 mt-1.5">
+          <div className="flex flex-wrap gap-1.5 mt-2">
             {tags.map((tag) => (
               <span
                 key={tag}
-                className="chip text-[11px] pl-2 pr-1 py-0.5"
+                className="chip text-xs pl-2 pr-1 py-0.5"
               >
                 {tag}
                 <button
                   type="button"
                   onClick={() => handleRemoveTag(tag)}
-                  className="ml-1 w-4 h-4 inline-flex items-center justify-center rounded-full hover:bg-surface-700 text-surface-400 hover:text-surface-200"
+                  className="ml-1 w-4 h-4 inline-flex items-center justify-center rounded-full hover:bg-surface-700/50 text-surface-400 hover:text-surface-200 transition-colors"
                   aria-label={`Remove ${tag}`}
                 >
                   ×

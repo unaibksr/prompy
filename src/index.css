@@ -3,9 +3,8 @@
 @tailwind utilities;
 
 /*
-  NOTE: JetBrains Mono is loaded from index.html with `display=swap` for
-  optimal LCP. This keeps the CSS file small and avoids a render-blocking
-  request to Google Fonts.
+  Modern minimalistic design system for PromptVault.
+  Clean lines, subtle glass effects, smooth animations.
 */
 
 @layer base {
@@ -29,8 +28,8 @@
   }
 
   ::-webkit-scrollbar {
-    width: 4px;
-    height: 4px;
+    width: 3px;
+    height: 3px;
   }
 
   ::-webkit-scrollbar-track {
@@ -41,7 +40,6 @@
     @apply bg-surface-600 rounded-full;
   }
 
-  /* Improve perceived performance of long lists & text nodes */
   .scrollbar-none {
     -ms-overflow-style: none;
     scrollbar-width: none;
@@ -49,70 +47,77 @@
   .scrollbar-none::-webkit-scrollbar {
     display: none;
   }
-
-  /* GPU-accelerate common motion so animations stay smooth */
-  .gpu {
-    transform: translateZ(0);
-    will-change: transform;
-  }
 }
 
 @layer components {
+  /* Modern card with subtle glass effect */
   .card {
-    @apply bg-surface-900 border border-surface-800 rounded-2xl p-4
+    @apply bg-surface-900/80 border border-surface-800/50 rounded-2xl p-3
            transition-all duration-200 ease-out
-           active:scale-[0.98];
+           hover:border-surface-700/50 hover:bg-surface-900/90
+           active:scale-[0.98] shadow-soft;
+    backdrop-filter: blur(4px);
   }
 
   .card:active {
-    @apply bg-surface-800;
+    @apply bg-surface-800/80;
   }
 
+  /* Primary button with glow */
   .btn-primary {
-    @apply bg-accent text-white font-medium rounded-xl px-6 py-3
+    @apply bg-accent/90 text-white font-medium rounded-xl px-5 py-2.5
            min-h-touch flex items-center justify-center gap-2
-           transition-all duration-150 active:scale-[0.97]
-           disabled:opacity-50 disabled:pointer-events-none;
+           transition-all duration-200
+           hover:bg-accent hover:shadow-glow
+           active:scale-[0.97]
+           disabled:opacity-40 disabled:pointer-events-none;
   }
 
+  /* Secondary button - minimal outline */
   .btn-secondary {
-    @apply bg-surface-800 text-surface-200 font-medium rounded-xl px-6 py-3
+    @apply bg-surface-800/50 text-surface-200 font-medium rounded-xl px-5 py-2.5
            min-h-touch flex items-center justify-center gap-2
-           transition-all duration-150 active:scale-[0.97]
-           border border-surface-700;
+           transition-all duration-200
+           hover:bg-surface-800 active:scale-[0.97]
+           border border-surface-700/50;
   }
 
+  /* Ghost button - text only */
   .btn-ghost {
     @apply text-surface-400 font-medium rounded-xl px-3 py-2
            min-h-touch min-w-touch flex items-center justify-center gap-2
-           transition-all duration-150 hover:text-surface-200 active:bg-surface-800;
+           transition-all duration-200
+           hover:text-surface-200 hover:bg-surface-800/50 active:bg-surface-800;
   }
 
+  /* Input field - minimal, clean */
   .input-field {
-    @apply w-full bg-surface-900 border border-surface-700 rounded-xl px-4 py-3
-           text-surface-50 placeholder-surface-500
-           focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent/30
-           transition-all duration-150;
+    @apply w-full bg-surface-900/50 border border-surface-700/50 rounded-xl px-4 py-2.5
+           text-surface-50 placeholder-surface-500 text-sm
+           focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/20
+           transition-all duration-200;
   }
 
+  /* Chip / pill - minimal tag */
   .chip {
-    @apply inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium
-           bg-surface-800 text-surface-300 border border-surface-700
-           transition-all duration-150;
+    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium
+           bg-surface-800/50 text-surface-300 border border-surface-700/30
+           transition-all duration-200;
   }
 
   .chip-active {
-    @apply bg-accent/20 text-accent-300 border-accent/30;
+    @apply bg-accent/15 text-accent-300 border-accent/30;
   }
 
+  /* Modern bottom sheet with glass effect */
   .bottom-sheet {
     @apply fixed inset-x-0 bottom-0 z-50
-           rounded-t-3xl bg-surface-900 border-t border-surface-700
+           rounded-t-3xl bg-surface-900/95 border-t border-surface-800/50
            transition-transform duration-300 ease-out
-           max-h-[90vh] overflow-y-auto;
+           max-h-[85vh] overflow-y-auto shadow-soft;
     transform: translateY(100%);
-    /* Improve scrolling on iOS */
     -webkit-overflow-scrolling: touch;
+    backdrop-filter: blur(20px);
   }
 
   .bottom-sheet.open {
@@ -120,66 +125,31 @@
   }
 
   .bottom-sheet-backdrop {
-    @apply fixed inset-0 z-40 bg-black/60 backdrop-blur-sm
+    @apply fixed inset-0 z-40 bg-black/50 backdrop-blur-sm
            transition-opacity duration-300;
   }
 
-  .swipe-card {
-    @apply relative overflow-hidden;
-  }
-
+  /* Toast notification */
   .toast {
     @apply fixed bottom-24 left-1/2 -translate-x-1/2 z-[60]
-           bg-surface-800 text-surface-100 border border-surface-700
-           rounded-xl px-4 py-3 shadow-2xl
+           bg-surface-800/90 text-surface-100 border border-surface-700/50
+           rounded-xl px-4 py-3 shadow-soft
            flex items-center gap-3 text-sm font-medium
            animate-slide-up;
+    backdrop-filter: blur(12px);
   }
-}
 
-@keyframes slide-up {
-  from {
-    opacity: 0;
-    transform: translateY(20px) translateX(-50%);
+  /* Skeleton shimmer */
+  @keyframes shimmer {
+    0% { background-position: -800px 0; }
+    100% { background-position: 800px 0; }
   }
-  to {
-    opacity: 1;
-    transform: translateY(0) translateX(-50%);
+
+  .skeleton {
+    background: linear-gradient(90deg, #1a1a1a 0%, #2a2a2a 50%, #1a1a1a 100%);
+    background-size: 800px 100%;
+    animation: shimmer 1.5s ease-in-out infinite;
   }
-}
-
-@keyframes fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-.animate-slide-up {
-  animation: slide-up 0.3s ease-out;
-}
-
-.animate-fade-in {
-  animation: fade-in 0.2s ease-out;
-}
-
-/* Swipe animations */
-.swipe-right {
-  transition: transform 0.2s ease-out;
-}
-
-.swipe-left {
-  transition: transform 0.2s ease-out;
-}
-
-/* Skeleton shimmer for loading states — used by LoadingScreen */
-@keyframes shimmer {
-  0% { background-position: -1000px 0; }
-  100% { background-position: 1000px 0; }
-}
-
-.skeleton {
-  background: linear-gradient(90deg, #1a1a1d 0%, #2a2a2f 50%, #1a1a1d 100%);
-  background-size: 1000px 100%;
-  animation: shimmer 1.6s linear infinite;
 }
 
 /* Honor user motion preferences */

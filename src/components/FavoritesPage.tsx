@@ -16,20 +16,20 @@ function FavoritesPageBase() {
   );
 
   return (
-    <div className="px-2.5 sm:px-3 pt-2 pb-24 space-y-3.5">
-      <h1 className="text-lg font-bold text-surface-50 leading-none px-0.5">Favorites</h1>
+    <div className="px-3 sm:px-4 pt-3 pb-28 space-y-4 animate-fade-in">
+      <h1 className="text-xl font-semibold text-surface-50 tracking-tight px-1">Favorites</h1>
 
       {recentlyUsed.length > 0 && (
         <section>
-          <div className="flex items-baseline justify-between mb-1.5 px-0.5">
-            <h2 className="text-[11px] font-medium text-surface-500 uppercase tracking-wider">
+          <div className="flex items-baseline justify-between mb-2 px-1">
+            <h2 className="text-[10px] font-medium text-surface-500 uppercase tracking-widest">
               Recently Used
             </h2>
             <span className="text-[10px] text-surface-600 tabular-nums">
               {recentlyUsed.length}
             </span>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2.5">
             {recentlyUsed.map((prompt) => (
               <PromptCard
                 key={prompt.id}
@@ -42,8 +42,8 @@ function FavoritesPageBase() {
       )}
 
       <section>
-        <div className="flex items-baseline justify-between mb-1.5 px-0.5">
-          <h2 className="text-[11px] font-medium text-surface-500 uppercase tracking-wider">
+        <div className="flex items-baseline justify-between mb-2 px-1">
+          <h2 className="text-[10px] font-medium text-surface-500 uppercase tracking-widest">
             Favorites
           </h2>
           <span className="text-[10px] text-surface-600 tabular-nums">
@@ -51,17 +51,17 @@ function FavoritesPageBase() {
           </span>
         </div>
         {favorites.length === 0 ? (
-          <div className="text-center py-10">
-            <div className="mx-auto mb-2 text-surface-600 w-10 h-10 flex items-center justify-center">
-              <HeartIcon size={40} />
+          <div className="text-center py-16">
+            <div className="mx-auto mb-3 text-surface-600 w-10 h-10 flex items-center justify-center">
+              <HeartIcon size={36} />
             </div>
-            <p className="text-surface-500 text-sm">No favorites yet</p>
-            <p className="text-surface-600 text-xs mt-1">
+            <p className="text-surface-400 text-sm">No favorites yet</p>
+            <p className="text-surface-500 text-xs mt-1">
               Swipe right on a prompt to favorite it
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2.5">
             {favorites.map((prompt) => (
               <PromptCard
                 key={prompt.id}
